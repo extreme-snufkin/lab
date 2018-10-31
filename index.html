@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8" />
-<title>GitHub→Netlify連携テスト</title>
+<title>静的ホスティング環境の検討</title>
 <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
@@ -11,17 +11,114 @@
 <body>
 <div id="wrap">
 <header id="head">
-    <h1>GitHub→Netlify連携テスト</h1></header>
-<nav id="navi"><ul><li><a href="./">Home</a></li></ul></nav>
+    <h1>静的ホスティング環境の検討</h1></header>
 <article class="post">
-<h2>GitHub→Netlify連携テスト　その１</h2>
-<p>2度目のコミット</p>
+    <h2>静的ホスティングパターンの要件比較</h2>
+        <p>パターン①：WordPress.com</p>
+        <p>パターン②：WiX.com</p>
+        <p>パターン③：Firebase Hosting ＋ CircleCI</p>
+        <p>パターン④：Netlify</p>
+        <table>
+            <tbody>
+                <tr><td></td><td>パターン①</td><td>パターン②</td><td>パターン③</td><td>パターン④</td></tr>
+                <tr><td>アクセス制限</td><td>◯</td><td>◯</td><td>△</td><td>◯</td></tr>
+                <tr><td>カスタムドメイン</td><td>◯</td><td>◯</td><td>◯</td><td>◯</td></tr>
+                <tr><td>SSL証明書</td><td>◯</td><td>◯</td><td>◯</td><td>◯</td></tr>
+                <tr><td>複数サイト管理</td><td>☓</td><td>◯</td><td>△</td><td>◯</td></tr>
+                <tr><td>サービスコスト</td><td>◯</td><td>◯</td><td>☓</td><td>◯</td></tr>
+                <tr><td>運用コスト</td><td>△</td><td>△</td><td>☓</td><td>◯</td></tr>
+                <tr><td>GitHub連携</td><td>☓</td><td>☓</td><td>◯</td><td>◯</td></tr>
+                <tr><td>移植性</td><td>△</td><td>☓</td><td>◯</td><td>◯</td></tr>
+                <tr><td>サポート</td><td>△</td><td>△</td><td>？</td><td>△</td></tr>
+                <tr><td>セキュリティ</td><td>◯</td><td>◯</td><td>△</td><td>◯</td></tr>
+                <tr><td>バックアップ</td><td>◯</td><td>△</td><td>◯</td><td>-</td></tr>
+                <tr><td>死活監視</td><td>◯</td><td>-</td><td>-</td><td>-</td></tr>
+            </tbody>
+        </table>
 </article>
 <article class="post">
-<h2>GitHub→Netlify連携テスト　その２</h2>
-<p>pf-001ブランチからの検証向けコミット</p>
+    <table>
+        <tbody>
+            <tr><td>※アクセス制限：</td><td>IP制限 or Basic認証 or 独自ユーザ認証等により、外部向け非公開機能を有しているか</td></tr>
+            <tr><td>※カスタムドメイン：</td><td>購入済み独自ドメインをホスティング先にマッピングできるか</td></tr>
+            <tr><td>※SSL証明書：</td><td>SSL証明書の発行・更新がマネージドされているか</td></tr>
+            <tr><td>※複数サイト管理：</td><td>1つのアカウントで複数サイト(本番・検証想定)作成可能か</td></tr>
+            <tr><td>※サービスコスト：</td><td>利用料が月額US$100-以下で運用可能か</td></tr>
+            <tr><td>※運用コスト：</td><td>初期構築以外の継続運用・保守の観点で利用者側のメンテナンス工数が定期的に発生するか</td></tr>
+            <tr><td>※GitHub連携：</td><td>GitHubの指定ブランチにPushしてホスティング内容が変更されるか</td></tr>
+            <tr><td>※移植性：</td><td>既存のコンテンツが移行しやすいか</td></tr>
+            <tr><td>※サポート：</td><td>メール or チャット or 電話でのサポートを受けられるか</td></tr>
+            <tr><td>※セキュリティ：</td><td>M/Wのバージョンアップや明示的にセキュリティ対策が実施されているか</td></tr>
+            <tr><td>※バックアップ：</td><td>自動バックアップと定点リストアが可能か</td></tr>
+            <tr><td>※死活監視：</td><td>死活監視通知を利用者が受け取れるか</td></tr>
+        </tbody>
+    </table>
 </article>
-<footer id="foot"><a href="./">GitHub→Netlify連携テスト</a></footer>
+<article class="post">
+    <h2>新規構築・現環境マイグレーションにおける採用メリット／デメリット</h2>
+    <h3>WordPress.com のメリット</h3>
+    <ul>
+        <li>採用実績があり、非エンジニアメンバーのみで継続運用出来ている</li>
+        <li>こちらで希望する非機能要件に対応している</li>
+        <li>SaaS以外でWordPressを運用することと比較すると大幅なコスト削減になる</li>
+        <li>WordPressで運用していたコンテンツの移行がしやすい</li>
+    </ul>
+    <h3>WordPress.com のデメリット</h3>
+    <ul>
+        <li>サポートのレスポンスは早いが、英語での技術的なチャットとなる為、ハードルが高い</li>
+        <li>GitHub連携が出来ず、GUI上で手動モジュール更新作業を実施する必要がある</li>
+    </ul>
+    <h3>WiX.com のメリット</h3>
+    <ul>
+        <li>採用実績があり、非エンジニアメンバーのみで継続運用出来ている</li>
+        <li>こちらで希望する非機能要件にだいたい対応している</li>
+        <li>SaaS以外で静的コンテンツのホスティングを運用することと比較すると大幅なコスト削減になる</li>
+    </ul>
+    <h3>WiX.com のデメリット</h3>
+    <ul>
+        <li>サポートは英語での対応となる為、ハードルが高い</li>
+        <li>GitHub連携が出来ず、GUI上で手動モジュール更新作業を実施する必要がある</li>
+        <li>自動的にバックアップを取得する機能がない</li>
+        <li>自由に作られた静的コンテンツをWiXに移行しようとすると難しさを感じた</li>
+    </ul>
+    <h3>Firebase Hosting ＋ CircleCI のメリット</h3>
+    <ul>
+        <li>GitHubと連携する場合の構成としてはシンプル</li>
+        <li>CircleCIから簡単に本番環境、検証環境へのデプロイが行える</li>
+        <li>GitHubにPushするとCircleCI上のGUIのボタンが有効化され、検証→本番とワークフローに沿ってデプロイが可能</li>
+        <li>FoWはこの形式でリリース 実績あり</li>
+    </ul>
+    <h3>Firebase Hosting ＋ CircleCI のデメリット</h3>
+    <ul>
+        <li>Firebase Hosting は Terraform APIが無い為、PF室としては横展開しにくい</li>
+        <li>エンタプライズGitHubアカウント単位でしか、CircleCIの契約を結べない為、複数の事業で利用した場合に費用負担の分割が難しい</li>
+    </ul>
+    <h3>Firebase Hosting についてのその他の特性</h3>
+    <ul>
+        <li>CircleCI上の１つのアカウントでは、コンテナが共有される為、同時利用が増えた場合は、コンテナを増やすこととなる。これは、待ち行列を解消する全体シェア方式の方が無駄が省けるという考え方のようだ。</li>
+        <li>CircleCIは、1コンテナを追加する度に、US$50-/月 程度のコストが増加され、決して安くない</li>
+        <li>FIrebase Hostingは、通信量で課金体系が変わる為、アクセス数が多くないサイトは、無料で済むが、多いサイトの場合は、従量課金制となる</li>
+        <li>CIツールを変更した場合の想定：GitHub→CloudRepositoriesβ版→CloudBuild→Firebase Hosting は実現可能だが、複雑度が増す。
+            GCPの要素が全て有料な為、ミニマムスタートでも一定金額課金される上に非エンジニアでの運用は困難だと思われる。</li>
+    </ul>
+    <h3>Netlify のメリット</h3>
+    <ul>
+        <li>GitHubと連携する場合の構成としては最もシンプル</li>
+        <li>未検証だが、非エンジニアでも扱えそう</li>
+        <li>無料でもほとんどの機能が利用可能</li>
+        <li>有料プランを契約することで、非機能要件もほぼ達成可能</li>
+        <li>非機能要件をミニマムスタートした場合は、月額US$29-で開始可能</li>
+        <li>GitHubのGitフローに沿って検証→本番と自動的にデプロイが可能</li>
+        <li>最上位の有料プランでSLA締結やリージョンを跨いだCDNが利用可能</li>
+    </ul>
+    <h3>Netlify のデメリット</h3>
+    <ul>
+        <li>情報源がほぼ英語</li>
+        <li>コンテンツのアクセス制限手法は、パスワードロックだが、これを利用するには、有償プランを契約する必要がある</li>
+        <li>β版の機能等は、無料だが、将来的には有料化される可能性が高い為、使用する機能がβ版か気にする必要がある</li>
+    </ul>
+</article>
+<footer id="foot"><a href="./">静的ホスティング環境の検討</a></footer>
 </div>
 </body>
 </html>
